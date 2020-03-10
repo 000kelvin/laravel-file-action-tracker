@@ -34,6 +34,12 @@
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        @if (auth()->user()->type == 1)
+                        <a href="">View Pending Requests</a>
+                        @else
+
+                        @endif
+                        <a class="dropdown-item" href="">Track Progress</a>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}

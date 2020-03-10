@@ -40,7 +40,8 @@
             </div>
         </div>
     </div>
-    <div class="col-md-12">
+    @auth
+    <div class="col-md-12 acting">
         <div class="alert alert-success alert-block" id="went">
 
             <button type="button" class="close" data-dismiss="alert">×</button>
@@ -48,18 +49,21 @@
             <strong id="well"></strong>
 
         </div>
+        <div class="alert alert-warning alert-block" id="proc">
 
-        @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            There were some problems with your input.<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+            <button type="button" class="close" data-dismiss="alert">×</button>
+
+            <strong id="procwell"></strong>
+
         </div>
-        @endif
-        @auth
+        <div class="alert alert-danger alert-block" id="notwent">
+
+            <button type="button" class="close" data-dismiss="alert">×</button>
+
+            <strong id="notwell"></strong>
+
+        </div>
+
         <form action="{{ route('upload-action') }}" class="dropzone" style="height: 330px;">
             {{ csrf_field() }}
             <div class="fallback">
@@ -69,25 +73,59 @@
                 upload should not exceed 5MB.</small>
         </form>
 
+        <br>
+        <div class="who">
+            <label for="verifier">Who should recieve the document(s)?: </label>
+            <select name="verifier" class="verifier" id="verifier">
+                @foreach ($verifiers as $verifier)
+                <option value="{{ $verifier->id }}">{{ $verifier->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <br>
+
         <input type="button" id='uploadfiles' value='Upload Files'>
-        @endauth
+
     </div>
+    @endauth
     @auth
     <script src="{{ asset('assets/js/jquery-3.3.1.min.js')}}" type="text/javascript"></script>
     <script src="{{ asset('assets/js/dropzone.min.js')}}" type="text/javascript"></script>
     <script type='text/javascript'>
-        Dropzone.autoDiscover = false;
         $('#went').hide();
-        
+        $('#notwent').hide();
+        $('#proc').hide();
+        Dropzone.autoDiscover = false;
+
         var myDropzone = new Dropzone(".dropzone", {
         autoProcessQueue: false,
         parallelUploads: 10 // Number of files process at a time (default 2)
         });
+
+        myDropzone.on('sending', function(file, xhr, formData){
+        formData.append('verifier_id', $('#verifier').val());
+        });
         
+        myDropzone.on('error', function(){
+        $('#notwent').show();
+        $('#proc').hide();
+        $('#notwell').text("We encountered some errors while uploading your document, make sure you uploaded the required format or contact support if the problem persists");
+        });
+
+        myDropzone.on('success', function(){
+        $('#went').show();
+        $('#proc').hide();
+        $('#well').text("We have successfully recieved your file upload and we will get back to you shortly");
+        });
+
+        myDropzone.on('processing', function(){
+        $('#proc').show();
+        $('#procwell').text("We are uploading your file...");
+        });
+
         $('#uploadfiles').click(function(){
         myDropzone.processQueue();
-        $('#went').show();
-        $('#well').text("We have successfully recieved your file upload and we will get back to you shortly");
+        
         });
     </script>
     @endauth

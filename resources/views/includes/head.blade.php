@@ -16,6 +16,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
     @auth
     <link href="{{ asset('assets/css/dropzone.min.css')}}" rel="stylesheet" type="text/css">

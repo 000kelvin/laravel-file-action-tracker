@@ -18,7 +18,7 @@ class FileActionController extends Controller
 
         if ($files = $request->file('file')) {
             $filePath = 'actionImage';
-            $actionFile = auth()->user()->name . '-' . date('Y-m-d-H:i:s') . "." . $files->getClientOriginalExtension();
+            $actionFile = auth()->user()->id . '_' . date('Y_m_d') . "." . $files->getClientOriginalExtension();
             $files->move($filePath, $actionFile);
         }
 
@@ -26,8 +26,10 @@ class FileActionController extends Controller
         $fileActions = new FileActions();
         $userId = auth()->user()->id;
         $uniqueHash = md5('lasg-' . $userId);
+        $verifierId = $request->verifier_id;
 
-        $fileActions->user_id = $userId;
+        $fileActions->user_id = $verifierId;
+        $fileActions->verifier_id = $userId;
         $fileActions->unique_hash = $uniqueHash;
         $fileActions->image = $actionFile;
         $fileActions->steps = 1;
