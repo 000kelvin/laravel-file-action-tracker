@@ -9,7 +9,11 @@ use Illuminate\Support\Facades\Redirect;
 
 class FileActionController extends Controller
 {
-    //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function store(Request $request)
     {
         request()->validate([
@@ -18,14 +22,16 @@ class FileActionController extends Controller
 
         if ($files = $request->file('file')) {
             $filePath = 'actionImage';
-            $actionFile = auth()->user()->id . '_' . date('Y_m_d') . "." . $files->getClientOriginalExtension();
+            $fileName = $files->getClientOriginalName();
+            $actionFile = $fileName . '_' . auth()->user()->id . '_' . date('Y_m_d') . "." . $files->getClientOriginalExtension();
+
             $files->move($filePath, $actionFile);
         }
 
 
         $fileActions = new FileActions();
         $userId = auth()->user()->id;
-        $uniqueHash = md5('lasg-' . $userId);
+        $uniqueHash = md5('lasg-' . $userId . $fileName);
         $verifierId = $request->verifier_id;
 
         $fileActions->user_id = $verifierId;

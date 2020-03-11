@@ -17,11 +17,14 @@ class CreateFileActionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('verifier_id')->nullable();
-            $table->string('unique_hash')->unique();
+            $table->string('unique_hash');
             $table->string('image');
             $table->unsignedBigInteger('steps')->default(0)->nullable();
             $table->unsignedBigInteger('status')->default(0)->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('verifier_id')->references('id')->on('users');
         });
     }
 

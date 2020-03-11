@@ -18,7 +18,7 @@
 
                         <span>
                             <p>
-                                <h5>Viewing all pending requests</h5>
+                                <h5>Viewing all approved requests</h5>
                             </p>
                         </span>
                     </div>
@@ -29,7 +29,7 @@
     </div>
     @if(auth()->user()->type==1)
     <div class="col-md-12 acting">
-
+        @if($approveds->all() != [])
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -49,19 +49,20 @@
                     {{ session('success') }}
                 </div>
                 @endif
-                @foreach($pendings as $pending)
+
+                @foreach($approveds as $approved)
                 <tr>
-                    <th scope="row">{{ $pending->id }}</th>
-                    <td>{{ $pending->user()->pluck('name')->first() }}</td>
-                    <td><a href="{{ asset('actionImage/'.$pending->image) }}" download>{{ $pending->image }}</a></td>
-                    <td>{{ $pending->verifier()->pluck('name')->first() }}</td>
-                    <td>{{ $pending->steps }}</td>
+                    <th scope="row">{{ $approved->id }}</th>
+                    <td>{{ $approved->user()->pluck('name')->first() }}</td>
+                    <td><a href="{{ asset('actionImage/'.$approved->image) }}" download>{{ $approved->image }}</a></td>
+                    <td>{{ $approved->verifier()->pluck('name')->first() }}</td>
+                    <td>{{ $approved->steps }}</td>
                     <td><span
-                            class="badge {{ $pending->status == 0 ? 'badge-warning' :  ($pending->status == 1 ? 'badge-success' : 'badge-danger') }}">{{ $pending->status == 0 ? 'Pending' :  ($pending->status == 1 ? 'Approved' : 'Disapproved') }}</span>
+                            class="badge {{ $approved->status == 0 ? 'badge-warning' :  ($approved->status == 1 ? 'badge-success' : 'badge-danger') }}">{{ $approved->status == 0 ? 'approved' :  ($approved->status == 1 ? 'Approved' : 'Disapproved') }}</span>
                     </td>
-                    <td>{{ $pending->unique_hash }}</td>
+                    <td>{{ $approved->unique_hash }}</td>
                     <td>
-                        <form method="POST" action="{{ route('match-pending', $pending->id) }}">
+                        <form method="POST" action="{{ route('match-approved', $approved->id) }}">
                             @method('PUT')
                             @csrf
                             <button class="btn btn-success" type="submit">Match</button>
@@ -70,5 +71,10 @@
                 </tr>
                 @endforeach </tbody>
         </table>
-    </div> @endif
-</section> @endsection
+        @else
+        There is no data in this table
+        @endif
+    </div>
+    @endif
+</section>
+@endsection

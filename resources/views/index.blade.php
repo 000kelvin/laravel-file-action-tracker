@@ -30,8 +30,27 @@
                         </div>
 
                         @else
-                        <h5>Please upload the file to be verified by the administrator and we will get back to you
-                            shortly</h5>
+                        @if (auth()->user()->type == 1)
+                        <span>
+                            <p>
+                                <h5>Welcome admin, your role is to match all open requests to their respective parties
+                                    for verification, click the URL below to view all open requests</h5>
+                            </p>
+                        </span>
+
+                        <div class="links s-info">
+                            <a href="{{ route('upload-pending') }}">Match Pending Requests</a>
+                        </div>
+
+                        @else
+                        <span>
+                            <p>
+                                <h5>Please upload the file to be verified by the administrator and we will get back to
+                                    you
+                                    shortly</h5>
+                            </p>
+                        </span>
+                        @endif
                         @endguest
 
                     </div>
@@ -41,6 +60,7 @@
         </div>
     </div>
     @auth
+    @if(auth()->user()->type == 0)
     <div class="col-md-12 acting">
         <div class="alert alert-success alert-block" id="went">
 
@@ -87,47 +107,8 @@
         <input type="button" id='uploadfiles' value='Upload Files'>
 
     </div>
+    @endif
     @endauth
-    @auth
-    <script src="{{ asset('assets/js/jquery-3.3.1.min.js')}}" type="text/javascript"></script>
-    <script src="{{ asset('assets/js/dropzone.min.js')}}" type="text/javascript"></script>
-    <script type='text/javascript'>
-        $('#went').hide();
-        $('#notwent').hide();
-        $('#proc').hide();
-        Dropzone.autoDiscover = false;
 
-        var myDropzone = new Dropzone(".dropzone", {
-        autoProcessQueue: false,
-        parallelUploads: 10 // Number of files process at a time (default 2)
-        });
-
-        myDropzone.on('sending', function(file, xhr, formData){
-        formData.append('verifier_id', $('#verifier').val());
-        });
-        
-        myDropzone.on('error', function(){
-        $('#notwent').show();
-        $('#proc').hide();
-        $('#notwell').text("We encountered some errors while uploading your document, make sure you uploaded the required format or contact support if the problem persists");
-        });
-
-        myDropzone.on('success', function(){
-        $('#went').show();
-        $('#proc').hide();
-        $('#well').text("We have successfully recieved your file upload and we will get back to you shortly");
-        });
-
-        myDropzone.on('processing', function(){
-        $('#proc').show();
-        $('#procwell').text("We are uploading your file...");
-        });
-
-        $('#uploadfiles').click(function(){
-        myDropzone.processQueue();
-        
-        });
-    </script>
-    @endauth
 </section>
 @endsection

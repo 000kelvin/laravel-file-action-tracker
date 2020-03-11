@@ -35,11 +35,16 @@
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                         @if (auth()->user()->type == 1)
-                        <a href="">View Pending Requests</a>
+                        <a class="dropdown-item" href="{{ route('upload-pending') }}">Match Pending Requests</a>
+                        <a class="dropdown-item" href="{{ route('view-approved') }}">View Approved Requests</a>
+                        <a class="dropdown-item" href="{{ route('view-disapproved') }}">View Disapproved Requests</a>
+                        @elseif (auth()->user()->type == 2)
+                        <a class="dropdown-item" href="">Complete Pending Requests</a>
+                        <a class="dropdown-item" href="{{ route('view-approved') }}">View Approved Requests</a>
+                        <a class="dropdown-item" href="{{ route('view-disapproved') }}">View Disapproved Requests</a>
                         @else
-
+                        <a class="dropdown-item" href="">Track Request Progress</a>
                         @endif
-                        <a class="dropdown-item" href="">Track Progress</a>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}

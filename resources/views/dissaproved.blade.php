@@ -18,7 +18,7 @@
 
                         <span>
                             <p>
-                                <h5>Viewing all pending requests</h5>
+                                <h5>Viewing all dissaproved requests</h5>
                             </p>
                         </span>
                     </div>
@@ -27,9 +27,9 @@
             </div>
         </div>
     </div>
-    @if(auth()->user()->type==1)
+    @if(auth()->user()->type==1 || auth()->user()->type==2)
     <div class="col-md-12 acting">
-
+        @if($dissaproveds->all() != [])
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -49,19 +49,20 @@
                     {{ session('success') }}
                 </div>
                 @endif
-                @foreach($pendings as $pending)
+                @foreach($dissaproveds as $dissaproved)
                 <tr>
-                    <th scope="row">{{ $pending->id }}</th>
-                    <td>{{ $pending->user()->pluck('name')->first() }}</td>
-                    <td><a href="{{ asset('actionImage/'.$pending->image) }}" download>{{ $pending->image }}</a></td>
-                    <td>{{ $pending->verifier()->pluck('name')->first() }}</td>
-                    <td>{{ $pending->steps }}</td>
-                    <td><span
-                            class="badge {{ $pending->status == 0 ? 'badge-warning' :  ($pending->status == 1 ? 'badge-success' : 'badge-danger') }}">{{ $pending->status == 0 ? 'Pending' :  ($pending->status == 1 ? 'Approved' : 'Disapproved') }}</span>
+                    <th scope="row">{{ $dissaproved->id }}</th>
+                    <td>{{ $dissaproved->user()->pluck('name')->first() }}</td>
+                    <td><a href="{{ asset('actionImage/'.$dissaproved->image) }}" download>{{ $dissaproved->image }}</a>
                     </td>
-                    <td>{{ $pending->unique_hash }}</td>
+                    <td>{{ $dissaproved->verifier()->pluck('name')->first() }}</td>
+                    <td>{{ $dissaproved->steps }}</td>
+                    <td><span
+                            class="badge {{ $dissaproved->status == 0 ? 'badge-warning' :  ($dissaproved->status == 1 ? 'badge-success' : 'badge-danger') }}">{{ $dissaproved->status == 0 ? 'dissaproved' :  ($dissaproved->status == 1 ? 'Approved' : 'Disapproved') }}</span>
+                    </td>
+                    <td>{{ $dissaproved->unique_hash }}</td>
                     <td>
-                        <form method="POST" action="{{ route('match-pending', $pending->id) }}">
+                        <form method="POST" action="{{ route('view-dissaproved', $dissaproved->id) }}">
                             @method('PUT')
                             @csrf
                             <button class="btn btn-success" type="submit">Match</button>
@@ -70,5 +71,10 @@
                 </tr>
                 @endforeach </tbody>
         </table>
-    </div> @endif
-</section> @endsection
+        @else
+        There is no data for this table
+        @endif
+    </div>
+    @endif
+</section>
+@endsection
