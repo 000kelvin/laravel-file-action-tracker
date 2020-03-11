@@ -34,4 +34,4 @@ Route::get('file/disapproved/', 'Admin\DisapprovedController@index')->name('view
 Route::get('file/approved/', 'Admin\ApprovedController@index')->name('view-approved');
 
 // Verifier Actions
-Route::get('file/completed', 'Admin\ApprovedController@index')->name('action-completed')
+Route::get('file/completed', 'Admin\ApprovedController@index')->name('action-completed');
