@@ -18,7 +18,7 @@
 
                         <span>
                             <p>
-                                <h5>Viewing all approved requests</h5>
+                                <h5>Viewing {{ $title }}</h5>
                             </p>
                         </span>
                     </div>
@@ -27,7 +27,12 @@
             </div>
         </div>
     </div>
-    @if(auth()->user()->type==1)
+    @if(auth()->user()->type==1 || auth()->user()->type==2)
+    @if (session('success'))
+    <div class="alert alert-success" role="alert">
+        {{ session('success') }}
+    </div>
+    @endif
     <div class="col-md-12 acting">
         @if($approveds->all() != [])
         <table class="table table-bordered">
@@ -40,16 +45,10 @@
                     <th scope="col">Steps</th>
                     <th scope="col">Status</th>
                     <th scope="col">History (Click to view full History)</th>
-                    <th scope="col">Action</th>
+                    {{-- <th scope="col">Action</th> --}}
                 </tr>
             </thead>
             <tbody>
-                @if (session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
-                </div>
-                @endif
-
                 @foreach($approveds as $approved)
                 <tr>
                     <th scope="row">{{ $approved->id }}</th>
@@ -61,13 +60,13 @@
                             class="badge {{ $approved->status == 0 ? 'badge-warning' :  ($approved->status == 1 ? 'badge-success' : 'badge-danger') }}">{{ $approved->status == 0 ? 'approved' :  ($approved->status == 1 ? 'Approved' : 'Disapproved') }}</span>
                     </td>
                     <td>{{ $approved->unique_hash }}</td>
-                    <td>
+                    {{-- <td>
                         <form method="POST" action="{{ route('match-approved', $approved->id) }}">
-                            @method('PUT')
-                            @csrf
-                            <button class="btn btn-success" type="submit">Match</button>
-                        </form>
-                    </td>
+                    @method('PUT')
+                    @csrf
+                    <button class="btn btn-success" type="submit">Match</button>
+                    </form>
+                    </td> --}}
                 </tr>
                 @endforeach </tbody>
         </table>

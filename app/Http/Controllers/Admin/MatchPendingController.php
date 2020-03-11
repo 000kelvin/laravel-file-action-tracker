@@ -39,6 +39,6 @@ class MatchPendingController extends Controller
             ->log('I just did some matching');
 
 
-        return redirect('/file/pending')->with('success', 'Successfully matched');
+        return redirect()->back()->with('success', 'Successfully matched');
     }
 }

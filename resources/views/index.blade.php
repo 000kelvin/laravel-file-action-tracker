@@ -42,6 +42,18 @@
                             <a href="{{ route('upload-pending') }}">Match Pending Requests</a>
                         </div>
 
+                        @elseif(auth()->user()->type == 2)
+                        <span>
+                            <p>
+                                <h5>Welcome verifier, your role is to view all documents matched to you and confirm that
+                                    you have accessed them, click the URL below to view all open requests</h5>
+                            </p>
+                        </span>
+
+                        <div class="links s-info">
+                            <a href="{{ route('action-completing') }}">Complete Pending Requests</a>
+                        </div>
+
                         @else
                         <span>
                             <p>

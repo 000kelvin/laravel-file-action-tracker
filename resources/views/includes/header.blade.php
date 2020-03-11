@@ -38,8 +38,9 @@
                         <a class="dropdown-item" href="{{ route('upload-pending') }}">Match Pending Requests</a>
                         <a class="dropdown-item" href="{{ route('view-approved') }}">View Approved Requests</a>
                         <a class="dropdown-item" href="{{ route('view-disapproved') }}">View Disapproved Requests</a>
+                        <a class="dropdown-item" href="{{ route('view-user') }}">Add Roles to Users</a>
                         @elseif (auth()->user()->type == 2)
-                        <a class="dropdown-item" href="">Complete Pending Requests</a>
+                        <a class="dropdown-item" href="{{ route('action-completing') }}">Complete Pending Requests</a>
                         <a class="dropdown-item" href="{{ route('view-approved') }}">View Approved Requests</a>
                         <a class="dropdown-item" href="{{ route('view-disapproved') }}">View Disapproved Requests</a>
                         @else

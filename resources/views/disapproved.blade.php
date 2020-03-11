@@ -18,7 +18,7 @@
 
                         <span>
                             <p>
-                                <h5>Viewing all dissaproved requests</h5>
+                                <h5>Viewing {{ $title }}</h5>
                             </p>
                         </span>
                     </div>
@@ -29,7 +29,12 @@
     </div>
     @if(auth()->user()->type==1 || auth()->user()->type==2)
     <div class="col-md-12 acting">
-        @if($dissaproveds->all() != [])
+        @if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+        @endif
+        @if($disapproveds->all() != [])
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -40,34 +45,35 @@
                     <th scope="col">Steps</th>
                     <th scope="col">Status</th>
                     <th scope="col">History (Click to view full History)</th>
+                    @if(auth()->user()->type==2)
                     <th scope="col">Action</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
-                @if (session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
-                </div>
-                @endif
-                @foreach($dissaproveds as $dissaproved)
+
+                @foreach($disapproveds as $disapproved)
                 <tr>
-                    <th scope="row">{{ $dissaproved->id }}</th>
-                    <td>{{ $dissaproved->user()->pluck('name')->first() }}</td>
-                    <td><a href="{{ asset('actionImage/'.$dissaproved->image) }}" download>{{ $dissaproved->image }}</a>
+                    <th scope="row">{{ $disapproved->id }}</th>
+                    <td>{{ $disapproved->user()->pluck('name')->first() }}</td>
+                    <td><a href="{{ asset('actionImage/'.$disapproved->image) }}" download>{{ $disapproved->image }}</a>
                     </td>
-                    <td>{{ $dissaproved->verifier()->pluck('name')->first() }}</td>
-                    <td>{{ $dissaproved->steps }}</td>
+                    <td>{{ $disapproved->verifier()->pluck('name')->first() }}</td>
+                    <td>{{ $disapproved->steps }}</td>
                     <td><span
-                            class="badge {{ $dissaproved->status == 0 ? 'badge-warning' :  ($dissaproved->status == 1 ? 'badge-success' : 'badge-danger') }}">{{ $dissaproved->status == 0 ? 'dissaproved' :  ($dissaproved->status == 1 ? 'Approved' : 'Disapproved') }}</span>
+                            class="badge {{ $disapproved->status == 0 ? 'badge-warning' :  ($disapproved->status == 1 ? 'badge-success' : 'badge-danger') }}">{{ $disapproved->status == 0 ? 'disapproved' :  ($disapproved->status == 1 ? 'Approved' : 'Disapproved') }}</span>
                     </td>
-                    <td>{{ $dissaproved->unique_hash }}</td>
+                    <td>{{ $disapproved->unique_hash }}</td>
+
+                    @if(auth()->user()->type==2)
                     <td>
-                        <form method="POST" action="{{ route('view-dissaproved', $dissaproved->id) }}">
+                        <form method="POST" action="{{ route('action-approve', $disapproved->id) }}">
                             @method('PUT')
                             @csrf
-                            <button class="btn btn-success" type="submit">Match</button>
+                            <button class="btn btn-success" type="submit">Approve</button>
                         </form>
                     </td>
+                    @endif
                 </tr>
                 @endforeach </tbody>
         </table>

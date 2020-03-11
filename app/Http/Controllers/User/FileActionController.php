@@ -34,8 +34,8 @@ class FileActionController extends Controller
         $uniqueHash = md5('lasg-' . $userId . $fileName);
         $verifierId = $request->verifier_id;
 
-        $fileActions->user_id = $verifierId;
-        $fileActions->verifier_id = $userId;
+        $fileActions->user_id = $userId;
+        $fileActions->verifier_id = $verifierId;
         $fileActions->unique_hash = $uniqueHash;
         $fileActions->image = $actionFile;
         $fileActions->steps = 1;

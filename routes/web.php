@@ -21,6 +21,7 @@ Auth::routes();
 
 // Everyone's Actions
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('file/history/{history}', 'HistoryController@index')->name('history');
 
 // User Actions
 Route::post('file/upload', 'User\FileActionController@store')->name('upload-action');
@@ -33,5 +34,12 @@ Route::get('file/disapproved/', 'Admin\DisapprovedController@index')->name('view
 
 Route::get('file/approved/', 'Admin\ApprovedController@index')->name('view-approved');
 
+Route::get('users/list', 'Admin\AttachUserRoleController@index')->name('view-user');
+Route::put('users/make/{id}', 'Admin\AttachUserRoleController@user')->name('attach-user');
+Route::put('users/admin/{id}', 'Admin\AttachUserRoleController@admin')->name('attach-admin');
+Route::put('users/verifier/{id}', 'Admin\AttachUserRoleController@verifier')->name('attach-verifier');
+
 // Verifier Actions
-Route::get('file/completed', 'Admin\ApprovedController@index')->name('action-completed');
+Route::get('file/completed', 'Verifier\CompletedController@index')->name('action-completing');
+Route::put('file/completed/approved/{id}', 'Verifier\CompletedController@approve')->name('action-approve');
+Route::put('file/completed/disapproved/{id}', 'Verifier\CompletedController@disapprove')->name('action-disapprove');

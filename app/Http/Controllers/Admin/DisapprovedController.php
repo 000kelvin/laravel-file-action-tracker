@@ -15,11 +15,21 @@ class DisapprovedController extends Controller
 
     public function index()
     {
-        $dissaproveds = FileActions::where('status', 2)->get();
-        return view('dissaproved')->with([
-            'title' => 'All Dissaproved Requests',
+        $verifierId = auth()->user()->id;
+        if (auth()->user()->type == 2) {
+            $disapproveds = FileActions::where([['status', '=',  2], ['verifier_id', '=', $verifierId]])->get();
+            return view('disapproved')->with([
+                'title' => 'All Disapproved Requests By You',
 
-            'dissaproveds' => $dissaproveds
-        ]);
+                'disapproveds' => $disapproveds
+            ]);
+        } elseif (auth()->user()->type == 1) {
+            $disapproveds = FileActions::where('status', 2)->get();
+            return view('disapproved')->with([
+                'title' => 'All Disapproved Requests',
+
+                'disapproveds' => $disapproveds
+            ]);
+        }
     }
 }

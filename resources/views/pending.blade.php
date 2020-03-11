@@ -28,6 +28,11 @@
         </div>
     </div>
     @if(auth()->user()->type==1)
+    @if (session('success'))
+    <div class="alert alert-success" role="alert">
+        {{ session('success') }}
+    </div>
+    @endif
     <div class="col-md-12 acting">
 
         <table class="table table-bordered">
@@ -44,11 +49,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
-                </div>
-                @endif
+
                 @foreach($pendings as $pending)
                 <tr>
                     <th scope="row">{{ $pending->id }}</th>
@@ -70,5 +71,7 @@
                 </tr>
                 @endforeach </tbody>
         </table>
-    </div> @endif
-</section> @endsection
+    </div>
+    @endif
+</section>
+@endsection
